@@ -1,0 +1,6 @@
+{
+    "dependencies": {
+        "@alicloud/pop-core": "^1.7.9",
+        "axios": "^0.19.2"
+    }
+}
