@@ -5,7 +5,7 @@ aliddns by nodejs
 ### 下载代码
 
 ```sh
-git clone https://github.com/yu122/aliddns.git
+git clone https://github.com/ZHUIMEN/aliddns.git
 
 cd aliddns
 ```
