@@ -12,8 +12,9 @@ const serverKey = config.serverKey
 //定时检查更新记录值
 //首次启动
 console.log(new Date());
+
 //间隔一定时间自动刷新 
-setInterval(function () {
+setInterval(()=> {
     console.log(new Date())
     ddns();
 }, config.intervalTime);
@@ -24,12 +25,13 @@ async function sendNotify (text) {
     var params = new URLSearchParams();
     params.append('text', text +"  " +new Date().toLocaleDateString());   
     params.append('desp', text);   
+    
     const axiosConfig ={
       headers:{
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     }
-    await axios.post(`https://sc.ftqq.com/${serverKey}.send`,params,axiosConfig)
+    await axios.post(`https://sctapi.ftqq.com/${serverKey}.send`,params,axiosConfig)
     .then(res => {
 
         console.log(res)
@@ -72,8 +74,7 @@ function ddns() {
       console.log('阿里记录：', targetDomainInfo.Value);
       var regIp = /((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/gi;
       // 获取本机ip
-      // TODO url全部挂了 gg
-      Promise.all([
+      Promise.allSettled([
         axios
           .get('https://ip.cn/api/index?ip=&type=0')
           .then(res => res.data.ip),
@@ -87,7 +88,8 @@ function ddns() {
         publicIp.v4(),
       ])
         .then(function (response) {
-         let ip=refrain(response)
+        	// dome Array { status: 'fulfilled', value: '115.227.195.169' }
+         let ip=refrain(response.map(e=>{if (e.status==='fulfilled') return e.value;}));
          console.log("本地ip：",ip);
          if(ip!=targetDomainInfo.Value){
               sendNotify(`最新ip：${ip}`)
