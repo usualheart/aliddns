@@ -14,13 +14,14 @@ const serverKey = config.serverKey
 console.log(new Date());
 
 //间隔一定时间自动刷新 
-setInterval(function () {
+setInterval(()=> {
     console.log(new Date())
     ddns();
 }, config.intervalTime);
 
 //微信方糖通知
 async function sendNotify (text) {
+    if(!serverKey) return;
     var params = new URLSearchParams();
     params.append('text', text +"  " +new Date().toLocaleDateString());   
     params.append('desp', text);   
